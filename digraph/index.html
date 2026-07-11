@@ -144,7 +144,7 @@
             transition: all 0.2s ease;
             position: relative;
             z-index: 5;
-            overflow: visible; 
+            overflow: hidden; /* Changed to hidden to clip anything trying to escape the track squares */
         }
 
         .box span {
@@ -191,7 +191,7 @@
             pointer-events: none;
         }
 
-        /* --- RECTIFIED: Structured Center Deck Grid Layout --- */
+        /* --- Structured Center Deck Grid Layout --- */
         #center-deck {
             position: absolute;
             top: 17%;
@@ -207,7 +207,7 @@
             gap: 4px;
             padding: 6px;
             z-index: 10;
-            overflow: visible;
+            overflow: hidden; /* Prevent inner asset bleeding */
         }
 
         /* Perfectly sized deck cards for visual clarity */
@@ -224,11 +224,15 @@
             cursor: grab;
             touch-action: none; 
             position: relative;
+            overflow: hidden; /* Prevent children images from breaking layout limits */
         }
 
+        /* RECTIFIED: Strict size caps to stop pictures from breaking out and overlapping digraphs */
         .card img {
-            width: 85%;
-            height: 85%;
+            width: 90%;
+            height: 90%;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             pointer-events: none;
         }
@@ -500,8 +504,6 @@
                 img.alt = item.word;
                 card.appendChild(img);
 
-                // FIXED: Removed the text labels inside the deck so the images show properly.
-
                 attachPointerControls(card);
                 centerDeck.appendChild(card);
             });
@@ -518,7 +520,7 @@
                 element.style.transition = 'none';
                 element.style.zIndex = '999';
                 element.style.position = 'fixed';
-                element.style.width = '50px';  /* Fixed sizing baseline while moving */
+                element.style.width = '50px';  
                 element.style.height = '50px';
                 
                 moveAt(clientX, clientY);
@@ -575,8 +577,11 @@
                 audioCorrect.currentTime = 0;
                 audioCorrect.play().catch(()=>{});
                 
-                // Prepend image so text label wraps nicely below it inside the track box
                 const matchedImg = cardElement.querySelector('img').cloneNode(true);
+                // Ensure the cloned image behaves correctly inside the target path square box bounds too
+                matchedImg.style.width = '80%';
+                matchedImg.style.height = '50%';
+                
                 targetBox.insertBefore(matchedImg, targetBox.firstChild); 
                 targetBox.classList.add('completed');
                 cardElement.remove();
