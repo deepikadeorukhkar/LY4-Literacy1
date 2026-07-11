@@ -144,7 +144,7 @@
             transition: all 0.2s ease;
             position: relative;
             z-index: 5;
-            overflow: hidden; /* Changed to hidden to clip anything trying to escape the track squares */
+            overflow: hidden;
         }
 
         .box span {
@@ -207,10 +207,10 @@
             gap: 4px;
             padding: 6px;
             z-index: 10;
-            overflow: hidden; /* Prevent inner asset bleeding */
+            overflow: hidden;
         }
 
-        /* Perfectly sized deck cards for visual clarity */
+        /* Card bounding framework */
         .card {
             width: 100%;
             height: 100%;
@@ -224,15 +224,15 @@
             cursor: grab;
             touch-action: none; 
             position: relative;
-            overflow: hidden; /* Prevent children images from breaking layout limits */
+            overflow: hidden;
         }
 
-        /* RECTIFIED: Strict size caps to stop pictures from breaking out and overlapping digraphs */
+        /* RECTIFIED: Scaled sizing down to 70% max limits so pictures stay safely inside grid lines */
         .card img {
-            width: 90%;
-            height: 90%;
-            max-width: 100%;
-            max-height: 100%;
+            width: 70%;
+            height: 70%;
+            max-width: 70%;
+            max-height: 70%;
             object-fit: contain;
             pointer-events: none;
         }
@@ -520,8 +520,8 @@
                 element.style.transition = 'none';
                 element.style.zIndex = '999';
                 element.style.position = 'fixed';
-                element.style.width = '50px';  
-                element.style.height = '50px';
+                element.style.width = '45px';  
+                element.style.height = '45px';
                 
                 moveAt(clientX, clientY);
                 speakText(element.dataset.word);
@@ -535,7 +535,7 @@
             };
 
             function moveAt(nx, ny) {
-                const offsetSize = 25;
+                const offsetSize = 22.5;
                 element.style.left = (nx - offsetSize) + 'px';
                 element.style.top = (ny - offsetSize) + 'px';
             }
@@ -578,7 +578,6 @@
                 audioCorrect.play().catch(()=>{});
                 
                 const matchedImg = cardElement.querySelector('img').cloneNode(true);
-                // Ensure the cloned image behaves correctly inside the target path square box bounds too
                 matchedImg.style.width = '80%';
                 matchedImg.style.height = '50%';
                 
