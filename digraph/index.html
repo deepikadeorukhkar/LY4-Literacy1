@@ -67,7 +67,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 12px;
+            padding: 20px 14px; /* Increased padding for better vertical breathing room */
             opacity: 0;
             transition: opacity 0.5s ease-in;
         }
@@ -79,39 +79,40 @@
         header {
             text-align: center;
             width: 100%;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 32px; /* Marginally enhanced header size */
             color: #1e3a8a;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
 
         .instructions {
-            font-size: 13px;
+            font-size: 14px;
             color: #475569;
             line-height: 1.4;
             background: rgba(255, 255, 255, 0.9);
-            padding: 8px 14px;
+            padding: 10px 16px;
             border-radius: 12px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* --- Expanded Responsive Board Layout --- */
+        /* --- Maximized Responsive Board Layout --- */
         #board-wrapper {
             position: relative;
-            width: 94vw;
-            height: 94vw;
-            max-width: 410px; /* Upscaled base resolution for clear visibility */
-            max-height: 410px;
+            width: 92vw;
+            height: 92vw;
+            max-width: 430px; /* Expanded maximum size limits */
+            max-height: 430px;
             margin: auto;
             background: #fef08a; 
             border: 6px solid #fde047;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+            aspect-ratio: 1 / 1; /* Hard lock 1:1 ratio for rendering engines */
         }
 
         #path-grid {
@@ -142,11 +143,12 @@
             transition: all 0.2s ease;
             position: relative;
             z-index: 5;
-            overflow: hidden;
+            overflow: visible; /* FIXED: Prevent Android WebView clipping drop components */
         }
 
         .box span {
             line-height: 1.1;
+            transition: font-size 0.2s ease;
         }
 
         .box.special {
@@ -168,22 +170,28 @@
             background-color: #eff6ff;
         }
 
+        /* Completed adjustments ensuring layout integrity */
         .box.completed {
             background-color: #bbf7d0;
             border-color: #4ade80;
             color: #1e293b;
+            justify-content: space-evenly; 
         }
 
-        /* Dynamic scaling for picture dropping boxes */
+        .box.completed span {
+            font-size: 11px; /* Scaled text downward upon matching to make space */
+        }
+
+        /* FIXED: Force dropped images to fit fully without hidden clipping bounds */
         .box img {
             display: block;
-            width: auto;
-            height: auto;
-            max-width: 85% !important;
-            max-height: 70% !important; 
+            width: 80% !important;
+            height: 55% !important;
+            max-width: 80%;
+            max-height: 55%;
             object-fit: contain;
             pointer-events: none;
-            margin-top: 2px;
+            margin: 0 auto;
         }
 
         /* --- Enriched Internal Center Deck Cavity --- */
@@ -201,12 +209,12 @@
             justify-content: center;
             align-content: center;
             gap: 6px;
-            padding: 6px;
+            padding: 8px;
             z-index: 10;
             overflow: hidden;
         }
 
-        /* Significantly enlarged picture target cards for children click/drags */
+        /* Highly visible large picture target cards for children click/drags */
         .card {
             width: 12%;
             height: 12%;
@@ -239,17 +247,17 @@
             display: flex;
             justify-content: center;
             gap: 16px;
-            padding-bottom: 8px;
-            margin-top: 8px;
+            padding-bottom: 12px;
+            margin-top: 12px;
         }
 
         .hud-btn {
             background: #3b82f6;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 24px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 0 #2563eb;
@@ -570,6 +578,7 @@
                 audioCorrect.currentTime = 0;
                 audioCorrect.play().catch(()=>{});
                 
+                // FIXED: Append the matching image node correctly
                 const matchedImg = cardElement.querySelector('img').cloneNode(true);
                 targetBox.appendChild(matchedImg); 
                 targetBox.classList.add('completed');
