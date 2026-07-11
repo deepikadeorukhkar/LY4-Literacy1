@@ -61,13 +61,13 @@
         /* --- Main Game Layout Container --- */
         #game-container {
             width: 100%;
-            height: 100dvh; 
-            max-width: 480px; 
+            height: 100%;
+            max-width: 480px; /* Rigid container boundary for larger phone ratios */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 12px;
+            padding: 12px;
             opacity: 0;
             transition: opacity 0.5s ease-in;
         }
@@ -79,12 +79,11 @@
         header {
             text-align: center;
             width: 100%;
-            flex-shrink: 0;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 24px;
             color: #1e3a8a;
             margin-bottom: 2px;
             text-transform: uppercase;
@@ -101,19 +100,18 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* --- Dynamic Dual-Constraint Board Layout --- */
+        /* --- Fully Responsive Board (Fluid Scaled based on device limits) --- */
         #board-wrapper {
             position: relative;
-            width: min(88vw, 58vh);
-            height: min(88vw, 58vh);
-            max-width: 400px;
-            max-height: 400px;
+            width: 90vw;
+            height: 90vw;
+            max-width: 360px; /* Safe dimension constraints preventing Android overlapping */
+            max-height: 360px;
             margin: auto;
             background: #fef08a; 
-            border: 6px solid #fde047;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
-            flex-shrink: 0;
+            border: 5px solid #fde047;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
         }
 
         #path-grid {
@@ -125,20 +123,20 @@
             position: absolute;
             top: 0;
             left: 0;
-            padding: 6px;
+            padding: 4px;
         }
 
-        /* Path Box Elements */
+        /* Highly Adaptable Path Box Matrices */
         .box {
             background-color: #ffffff;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            margin: 1.5px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 6px;
+            margin: 1px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             color: #334155;
             transition: all 0.2s ease;
@@ -147,75 +145,67 @@
             overflow: hidden;
         }
 
-        .box span {
-            line-height: 1.1;
-            transition: font-size 0.2s ease;
-        }
-
         .box.special {
             background-color: #ef4444;
             color: white;
-            font-size: 11px;
+            font-size: 9px;
             text-transform: uppercase;
         }
 
         .box.finish-box {
             background-color: #10b981;
             color: white;
-            font-size: 11px;
+            font-size: 9px;
             text-transform: uppercase;
         }
 
         .box.active-target {
-            border: 2.5px dashed #3b82f6;
+            border: 2px dashed #3b82f6;
             background-color: #eff6ff;
         }
 
         .box.completed {
             background-color: #bbf7d0;
             border-color: #4ade80;
-            color: #1e293b;
-            justify-content: center; 
-        }
-
-        .box.completed span {
-            font-size: 10px; 
-            margin-top: 2px;
         }
 
         .box img {
-            display: block;
-            width: 80% !important;
-            height: 50% !important; 
+            width: 90%;
+            height: 90%;
             object-fit: contain;
             pointer-events: none;
         }
 
-        /* --- Structured Center Deck Grid Layout --- */
+        /* --- Responsive Center Tray (Dynamic Internal Cavity) --- */
         #center-deck {
             position: absolute;
             top: 17%;
             left: 17%;
             width: 66%;
             height: 66%;
-            background-color: rgba(248, 250, 252, 0.96);
-            border-radius: 12px;
+            background-color: rgba(248, 250, 252, 0.95);
+            border-radius: 10px;
             border: 2px dashed #94a3b8;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(5, 1fr);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
             gap: 4px;
-            padding: 6px;
+            padding: 4px;
             z-index: 10;
             overflow: hidden;
         }
 
-        /* Card bounding framework */
+        /* Pure Picture Cards (Fluid constraints tailored seamlessly for Android WebViews) */
         .card {
-            width: 100%;
-            height: 100%;
+            width: 11%;
+            height: 11%;
+            min-width: 32px;
+            min-height: 32px;
+            max-width: 44px;
+            max-height: 44px;
             background: #ffffff;
-            border: 2px solid #f97316;
+            border: 1.5px solid #f97316;
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
@@ -224,15 +214,11 @@
             cursor: grab;
             touch-action: none; 
             position: relative;
-            overflow: hidden;
         }
 
-        /* RECTIFIED: Scaled sizing down to 70% max limits so pictures stay safely inside grid lines */
         .card img {
-            width: 70%;
-            height: 70%;
-            max-width: 70%;
-            max-height: 70%;
+            width: 85%;
+            height: 85%;
             object-fit: contain;
             pointer-events: none;
         }
@@ -242,29 +228,28 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            gap: 16px;
-            padding-bottom: 8px;
-            margin-top: 10px;
-            flex-shrink: 0;
+            gap: 12px;
+            padding-bottom: 5px;
+            margin-top: 5px;
         }
 
         .hud-btn {
             background: #3b82f6;
             color: white;
             border: none;
-            padding: 10px 22px;
-            border-radius: 24px;
-            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 0 #2563eb;
+            box-shadow: 0 3px 0 #2563eb;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .hud-btn:active {
-            transform: translateY(4px);
+            transform: translateY(3px);
             box-shadow: none;
         }
 
@@ -284,12 +269,12 @@
         }
 
         .feedback-emoji {
-            font-size: 75px;
+            font-size: 70px;
             animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .feedback-text {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: bold;
             color: #1e293b;
             margin-top: 12px;
@@ -312,22 +297,22 @@
         }
 
         .celebration-emojis {
-            font-size: 65px;
-            letter-spacing: 12px;
-            margin-bottom: 20px;
+            font-size: 60px;
+            letter-spacing: 10px;
+            margin-bottom: 15px;
             animation: bounce 0.8s infinite alternate;
         }
 
         .completion-message {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             color: #065f46;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             max-width: 450px;
             line-height: 1.4;
         }
 
-        /* --- Animations --- */
+        /* --- Animations Room --- */
         @keyframes popUp {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -354,38 +339,46 @@
 </head>
 <body>
 
+    <!-- Native sound elements configured cleanly -->
     <audio id="audio-bg" src="assets/background-music.mp3" loop></audio>
     <audio id="audio-correct" src="assets/correct.mp3"></audio>
     <audio id="audio-wrong" src="assets/wrong.mp3"></audio>
 
+    <!-- Splash Display Intro Screen Frame -->
     <div id="intro-screen">
         <div class="logo-box">
             <img class="logo-img" src="assets/innovine-logo.png" alt="Innovine Logo">
         </div>
     </div>
 
+    <!-- Main Dynamic Application Screen -->
     <div id="game-container">
         <header>
             <h1>Digraph</h1>
             <div class="instructions">Begin at the start. Read each digraph in order and drag and drop the matching picture to reach the finish line.</div>
         </header>
 
+        <!-- Balanced Grid Area Structure Block -->
         <div id="board-wrapper">
             <div id="path-grid"></div>
+            <!-- Centralized Container Docking Region -->
             <div id="center-deck"></div>
         </div>
 
+        <!-- System Controls Display Panel -->
         <div id="hud">
             <button class="hud-btn" id="btn-audio">🔊 Repeat Prompt</button>
-            <button class="hud-btn" id="btn-restart" style="background:#ef4444; box-shadow:0 4px 0 #dc2626;">Restart</button>
+            <button class="hud-btn" id="btn-restart" style="background:#ef4444; box-shadow:0 3px 0 #dc2626;">Restart</button>
         </div>
     </div>
 
+    <!-- Live Dynamic HUD Status Popups -->
     <div id="feedback-overlay">
         <div class="feedback-emoji" id="feedback-emoji">👏</div>
         <div class="feedback-text" id="feedback-text">Great Job!</div>
     </div>
 
+    <!-- Final Success Terminal Screen -->
     <div id="completion-screen">
         <div class="celebration-emojis">🎉 ⭐ 👏</div>
         <div class="completion-message">Fantastic Job! You matched all the pictures to its corresponding digraphs.</div>
@@ -393,8 +386,10 @@
     </div>
 
     <script>
+        // Full sequence tracking map array
         const sequence = ["Start", "ch", "wh", "sh", "ph", "ch", "th", "ch", "wh", "sh", "wh", "sh", "ch", "ph", "th", "sh", "Finish"];
         
+        // Exact perimeter positions matrix mapping out the outer loop
         const gridPositions = [
             {r:1, c:1}, {r:1, c:2}, {r:1, c:3}, {r:1, c:4}, {r:1, c:5}, {r:1, c:6}, 
             {r:2, c:6}, {r:3, c:6}, {r:4, c:6}, {r:5, c:6}, {r:6, c:6},             
@@ -402,6 +397,7 @@
             {r:5, c:1}                                                              
         ];
 
+        // System inventory item list map config properties
         const gameItems = [
             { digraph: "ch", word: "chair", img: "assets/chair.png" },
             { digraph: "wh", word: "whale", img: "assets/whale.png" },
@@ -424,6 +420,7 @@
         let draggedElement = null;
         let audioStarted = false;
 
+        // Core Document Object Reference Hooks
         const gridContainer = document.getElementById("path-grid");
         const centerDeck = document.getElementById("center-deck");
         const introScreen = document.getElementById("intro-screen");
@@ -437,6 +434,7 @@
         const audioCorrect = document.getElementById("audio-correct");
         const audioWrong = document.getElementById("audio-wrong");
 
+        // Autoplay bypass permission routine
         function forceActivateAudio() {
             if (!audioStarted) {
                 audioBg.volume = 0.15; 
@@ -454,6 +452,7 @@
             }
         }
 
+        // Generate matrix path boxes dynamically 
         function buildBoard() {
             gridContainer.innerHTML = "";
             sequence.forEach((val, index) => {
@@ -466,10 +465,7 @@
                 } else if (val === "Finish") {
                     box.classList.add("finish-box");
                 }
-                
-                const label = document.createElement("span");
-                label.textContent = val;
-                box.appendChild(label);
+                box.textContent = val;
 
                 const pos = gridPositions[index];
                 if (pos) {
@@ -489,6 +485,7 @@
             }
         }
 
+        // Generate textless picture-only cards
         function prepareCards() {
             centerDeck.innerHTML = "";
             const cardsData = [...gameItems].sort(() => Math.random() - 0.5);
@@ -509,6 +506,7 @@
             });
         }
 
+        // Cross-Device UI Driver Engine (Calculates dynamic drop scales for iOS/Android perfectly)
         function attachPointerControls(element) {
             const onStart = (e) => {
                 forceActivateAudio();
@@ -520,8 +518,6 @@
                 element.style.transition = 'none';
                 element.style.zIndex = '999';
                 element.style.position = 'fixed';
-                element.style.width = '45px';  
-                element.style.height = '45px';
                 
                 moveAt(clientX, clientY);
                 speakText(element.dataset.word);
@@ -535,7 +531,8 @@
             };
 
             function moveAt(nx, ny) {
-                const offsetSize = 22.5;
+                // Dynamically offset bounds to accommodate touch target variance across devices
+                const offsetSize = element.offsetWidth / 2 || 20;
                 element.style.left = (nx - offsetSize) + 'px';
                 element.style.top = (ny - offsetSize) + 'px';
             }
@@ -577,11 +574,9 @@
                 audioCorrect.currentTime = 0;
                 audioCorrect.play().catch(()=>{});
                 
+                targetBox.innerHTML = "";
                 const matchedImg = cardElement.querySelector('img').cloneNode(true);
-                matchedImg.style.width = '80%';
-                matchedImg.style.height = '50%';
-                
-                targetBox.insertBefore(matchedImg, targetBox.firstChild); 
+                targetBox.appendChild(matchedImg);
                 targetBox.classList.add('completed');
                 cardElement.remove();
 
@@ -612,11 +607,10 @@
                 feedbackText.textContent = "Try Again!";
                 feedbackOverlay.style.display = "flex";
 
+                // Return back smoothly inside layout bounds
                 cardElement.style.position = 'relative';
                 cardElement.style.left = '0px';
                 cardElement.style.top = '0px';
-                cardElement.style.width = '100%';
-                cardElement.style.height = '100%';
 
                 setTimeout(() => {
                     feedbackOverlay.style.display = "none";
@@ -627,8 +621,8 @@
         function triggerGameCompletion() {
             const finishBox = document.getElementById(`step-${sequence.length - 1}`);
             if(finishBox) {
-                finishBox.innerHTML = "<span>🎉</span>";
-                finishBox.style.fontSize = "28px";
+                finishBox.textContent = "🎉";
+                finishBox.style.fontSize = "26px";
             }
             createConfettiParticles();
             completionScreen.style.display = "flex";
