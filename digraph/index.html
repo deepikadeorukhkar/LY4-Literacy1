@@ -62,7 +62,7 @@
         #game-container {
             width: 100%;
             height: 100%;
-            max-width: 480px; /* Rigid container boundary for larger phone ratios */
+            max-width: 480px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -100,12 +100,12 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        /* --- Fully Responsive Board (Fluid Scaled based on device limits) --- */
+        /* --- Fully Responsive Board --- */
         #board-wrapper {
             position: relative;
             width: 90vw;
             height: 90vw;
-            max-width: 360px; /* Safe dimension constraints preventing Android overlapping */
+            max-width: 360px; 
             max-height: 360px;
             margin: auto;
             background: #fef08a; 
@@ -126,7 +126,7 @@
             padding: 4px;
         }
 
-        /* Highly Adaptable Path Box Matrices */
+        /* Path Box Elements */
         .box {
             background-color: #ffffff;
             border: 1.5px solid #cbd5e1;
@@ -136,7 +136,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             color: #334155;
             transition: all 0.2s ease;
@@ -167,13 +167,19 @@
         .box.completed {
             background-color: #bbf7d0;
             border-color: #4ade80;
+            color: #1e293b;
         }
 
+        /* FIXED: Force matched images to stay strictly contained inside the path squares on Android */
         .box img {
-            width: 90%;
-            height: 90%;
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 80% !important;
+            max-height: 55% !important;
             object-fit: contain;
             pointer-events: none;
+            margin-top: 2px;
         }
 
         /* --- Responsive Center Tray (Dynamic Internal Cavity) --- */
@@ -196,7 +202,7 @@
             overflow: hidden;
         }
 
-        /* Pure Picture Cards (Fluid constraints tailored seamlessly for Android WebViews) */
+        /* Pure Picture Cards */
         .card {
             width: 11%;
             height: 11%;
@@ -312,7 +318,7 @@
             line-height: 1.4;
         }
 
-        /* --- Animations Room --- */
+        /* --- Animations --- */
         @keyframes popUp {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -339,46 +345,38 @@
 </head>
 <body>
 
-    <!-- Native sound elements configured cleanly -->
     <audio id="audio-bg" src="assets/background-music.mp3" loop></audio>
     <audio id="audio-correct" src="assets/correct.mp3"></audio>
     <audio id="audio-wrong" src="assets/wrong.mp3"></audio>
 
-    <!-- Splash Display Intro Screen Frame -->
     <div id="intro-screen">
         <div class="logo-box">
             <img class="logo-img" src="assets/innovine-logo.png" alt="Innovine Logo">
         </div>
     </div>
 
-    <!-- Main Dynamic Application Screen -->
     <div id="game-container">
         <header>
             <h1>Digraph</h1>
             <div class="instructions">Begin at the start. Read each digraph in order and drag and drop the matching picture to reach the finish line.</div>
         </header>
 
-        <!-- Balanced Grid Area Structure Block -->
         <div id="board-wrapper">
             <div id="path-grid"></div>
-            <!-- Centralized Container Docking Region -->
             <div id="center-deck"></div>
         </div>
 
-        <!-- System Controls Display Panel -->
         <div id="hud">
             <button class="hud-btn" id="btn-audio">🔊 Repeat Prompt</button>
             <button class="hud-btn" id="btn-restart" style="background:#ef4444; box-shadow:0 3px 0 #dc2626;">Restart</button>
         </div>
     </div>
 
-    <!-- Live Dynamic HUD Status Popups -->
     <div id="feedback-overlay">
         <div class="feedback-emoji" id="feedback-emoji">👏</div>
         <div class="feedback-text" id="feedback-text">Great Job!</div>
     </div>
 
-    <!-- Final Success Terminal Screen -->
     <div id="completion-screen">
         <div class="celebration-emojis">🎉 ⭐ 👏</div>
         <div class="completion-message">Fantastic Job! You matched all the pictures to its corresponding digraphs.</div>
@@ -386,10 +384,8 @@
     </div>
 
     <script>
-        // Full sequence tracking map array
         const sequence = ["Start", "ch", "wh", "sh", "ph", "ch", "th", "ch", "wh", "sh", "wh", "sh", "ch", "ph", "th", "sh", "Finish"];
         
-        // Exact perimeter positions matrix mapping out the outer loop
         const gridPositions = [
             {r:1, c:1}, {r:1, c:2}, {r:1, c:3}, {r:1, c:4}, {r:1, c:5}, {r:1, c:6}, 
             {r:2, c:6}, {r:3, c:6}, {r:4, c:6}, {r:5, c:6}, {r:6, c:6},             
@@ -397,7 +393,6 @@
             {r:5, c:1}                                                              
         ];
 
-        // System inventory item list map config properties
         const gameItems = [
             { digraph: "ch", word: "chair", img: "assets/chair.png" },
             { digraph: "wh", word: "whale", img: "assets/whale.png" },
@@ -420,7 +415,6 @@
         let draggedElement = null;
         let audioStarted = false;
 
-        // Core Document Object Reference Hooks
         const gridContainer = document.getElementById("path-grid");
         const centerDeck = document.getElementById("center-deck");
         const introScreen = document.getElementById("intro-screen");
@@ -434,7 +428,6 @@
         const audioCorrect = document.getElementById("audio-correct");
         const audioWrong = document.getElementById("audio-wrong");
 
-        // Autoplay bypass permission routine
         function forceActivateAudio() {
             if (!audioStarted) {
                 audioBg.volume = 0.15; 
@@ -452,7 +445,6 @@
             }
         }
 
-        // Generate matrix path boxes dynamically 
         function buildBoard() {
             gridContainer.innerHTML = "";
             sequence.forEach((val, index) => {
@@ -465,7 +457,11 @@
                 } else if (val === "Finish") {
                     box.classList.add("finish-box");
                 }
-                box.textContent = val;
+                
+                // Add the text label directly
+                const label = document.createElement("span");
+                label.textContent = val;
+                box.appendChild(label);
 
                 const pos = gridPositions[index];
                 if (pos) {
@@ -485,7 +481,6 @@
             }
         }
 
-        // Generate textless picture-only cards
         function prepareCards() {
             centerDeck.innerHTML = "";
             const cardsData = [...gameItems].sort(() => Math.random() - 0.5);
@@ -506,7 +501,6 @@
             });
         }
 
-        // Cross-Device UI Driver Engine (Calculates dynamic drop scales for iOS/Android perfectly)
         function attachPointerControls(element) {
             const onStart = (e) => {
                 forceActivateAudio();
@@ -531,7 +525,6 @@
             };
 
             function moveAt(nx, ny) {
-                // Dynamically offset bounds to accommodate touch target variance across devices
                 const offsetSize = element.offsetWidth / 2 || 20;
                 element.style.left = (nx - offsetSize) + 'px';
                 element.style.top = (ny - offsetSize) + 'px';
@@ -574,9 +567,9 @@
                 audioCorrect.currentTime = 0;
                 audioCorrect.play().catch(()=>{});
                 
-                targetBox.innerHTML = "";
+                // FIXED: Instead of wiping out the text, we prepend/append the image safely within lines
                 const matchedImg = cardElement.querySelector('img').cloneNode(true);
-                targetBox.appendChild(matchedImg);
+                targetBox.appendChild(matchedImg); 
                 targetBox.classList.add('completed');
                 cardElement.remove();
 
@@ -607,7 +600,6 @@
                 feedbackText.textContent = "Try Again!";
                 feedbackOverlay.style.display = "flex";
 
-                // Return back smoothly inside layout bounds
                 cardElement.style.position = 'relative';
                 cardElement.style.left = '0px';
                 cardElement.style.top = '0px';
@@ -621,7 +613,7 @@
         function triggerGameCompletion() {
             const finishBox = document.getElementById(`step-${sequence.length - 1}`);
             if(finishBox) {
-                finishBox.textContent = "🎉";
+                finishBox.innerHTML = "<span>🎉</span>";
                 finishBox.style.fontSize = "26px";
             }
             createConfettiParticles();
